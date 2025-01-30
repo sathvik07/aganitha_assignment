@@ -26,6 +26,11 @@ End Result:
 1. i was able to fetch papers from PubMed API and check for papers with authors affiliated with pharmaceutical or biotech companies, and then saves the results in a given CSV filename.
 2. i was also able to create command line arguements as per the problem statement requirment.
 
+
+---- If you have a moment, could you go through my code to ensure everything is in line with the expectations? I'd love to hear any thoughts you have.
+
+
+
 # PubMed Fetcher
 
 This program fetches research papers from PubMed based on a user-specified query, filters papers with authors affiliated with pharmaceutical or biotech companies, and saves the results in a CSV file.
@@ -55,6 +60,3 @@ To fetch papers and save results to a CSV file:
 poetry run wanted_papers "pharmaceutical research" -f result_papers.csv
 
 
-
-
----- If you have a moment, could you go through my code to ensure everything is in line with the expectations? I'd love to hear any thoughts you have.
