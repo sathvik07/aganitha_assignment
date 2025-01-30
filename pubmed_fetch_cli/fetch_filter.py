@@ -53,12 +53,12 @@ class Pebmed_Fether:
             "id": ",".join(idlist),
         }
 
-        print("params are :", params)
+        # print("params are :", params)
         if self.api_key:
             params["api_key"] = self.api_key
 
         response = requests.get(self.Base_fetch_url, params=params)
-        print(response.status_code)
+        # print(response.status_code)
         response.raise_for_status()
         return response.text
 
@@ -71,48 +71,44 @@ class Pebmed_Fether:
         root = ET.fromstring(xml_data)
         papers = []
 
-
-
-        for article in root.findall(".//PubMedArticle"):
-            pubmed_id = article.find(".//PubMedID").text if article.find(".//PubMedID") is not None else "N/A"
+        for article in root.findall(".//PubmedArticle"):
+            pubmed_id = article.find(".//PMID").text if article.find(".//PMID") is not None else "N/A"
             title = article.find(".//ArticleTitle").text if article.find(".//ArticleTitle") is not None else "N/A"
             publication_date = "N/A"
             pub_date_elem = article.find(".//PubDate")
-            if pub_date_elem:
+            if pub_date_elem is not None:
                 year = pub_date_elem.find(".//Year").text if pub_date_elem.find(".//Year") is not None else ""
                 month = pub_date_elem.find(".//Month").text if pub_date_elem.find(".//Month") is not None else ""
                 day = pub_date_elem.find(".//Day").text if pub_date_elem.find(".//Day") is not None else ""
                 publication_date = f"{year}-{month}-{day}".strip("-")
-
 
             non_academic_authors = []
             company_affiliations = []
             corresponding_author_email = "N/A"
 
             for author in article.findall(".//Author"):
-                affiliations = [aff.text for aff in author.findall("AffiliationInfo/Affiliation") if aff.text]
+                affiliations = [aff.text for aff in author.findall(".//Affiliation") if aff.text]
                 if any("pharma" in aff.lower() or "biotech" in aff.lower() for aff in affiliations):
                     company_affiliations.extend(aff for aff in affiliations if "pharma" in aff.lower() or "biotech" in aff.lower())
                     non_academic_authors.append(author.find("LastName").text if author.find("LastName") is not None else "Unknown Author")
 
+            papers.append({
+                "PubmedID": pubmed_id,
+                "Title": title,
+                "Publication Date": publication_date,
+                "Non-academic Author(s)": ", ".join(non_academic_authors),
+                "company_affiliation(s)": ", ".join(company_affiliations),
+                "Corresponding Author Email": corresponding_author_email,
+            })
 
-                papers.append({
-                    "PubmedID": pubmed_id,
-                    "Title": title,
-                    "Publication Date": publication_date,
-                    "Non-academic Author(s)": non_academic_authors,
-                    "Company Affiliation(s)": company_affiliations,
-                    "Corresponding Author Email": corresponding_author_email,
-                })
-
-
+        # print("paper details are :", papers)
         return papers
 
     def write_to_csv(self, data, file_path: str) -> None:
         """save paper details to csv file"""
 
-        fieldnames = ["PubmedID", "Title", "Publication Date", "Non-academic Author(s)", "Company Affiliation(s)", "Corresponding Author Email"]
-
+        fieldnames = ["PubmedID", "Title", "Publication Date", "Non-academic Author(s)", "company_affiliation(s)", "Corresponding Author Email"]
+        # print("data is :", data)
         with open(file_path, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()

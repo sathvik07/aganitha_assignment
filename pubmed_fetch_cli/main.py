@@ -23,7 +23,7 @@ def main():
 
         xml_data = fetcher.fetch_research_papers(ids)
         papers = fetcher.parse_papers(xml_data)
-
+        # print("papers are", papers)
         if args.file:
             fetcher.write_to_csv(papers, args.file)
             print(f"Results written to {args.file} file")
