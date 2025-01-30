@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from pebmed_fetch_cli.fetch_filter import Pebmed_Fether
+from pubmed_fetch_cli.fetch_filter import Pebmed_Fether
 
 def main():
     parser = argparse.ArgumentParser(description='Fetch research papers from PubMed')

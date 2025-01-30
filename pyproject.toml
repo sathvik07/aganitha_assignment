@@ -1,9 +1,9 @@
 [project.scripts]
-wanted_papers = "pebmed_fetch_cli.main:main"
+wanted_papers = "pubmed_fetch_cli.main:main"
 
 
 [project]
-name = "pebmed_fetch"
+name = "pubmed_fetch"
 version = "0.1.0"
 description = "Fetch research papers using PubMed API and export to CSV."
 authors = [
@@ -14,7 +14,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = ["requests>=2.32.3,<3.0.0", "pylint (>=3.3.4,<4.0.0)"]
 
-packages = [{include = "pebmed_fetch_cli"}]
+packages = [{include = "pubmed_fetch_cli"}]
 
 
 [build-system]
